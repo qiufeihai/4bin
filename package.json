@@ -1,0 +1,27 @@
+{
+	"name": "4bin",
+	"version": "1.0.0",
+	"description": "some script",
+	"main": "index.js",
+	"scripts": {
+		"build": "node build.js"
+	},
+	"bin": {
+		"4mks": "4mks"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/qiufeihai/4bin.git"
+	},
+	"keywords": [],
+	"author": "feihai",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/qiufeihai/4bin/issues"
+	},
+	"homepage": "https://github.com/qiufeihai/4bin#readme",
+	"dependencies": {
+		"globby": "^9.1.0",
+		"json-format": "^1.0.1"
+	}
+}
