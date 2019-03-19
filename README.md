@@ -1,0 +1,2 @@
+# 4bin
+some script
