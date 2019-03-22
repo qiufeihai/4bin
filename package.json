@@ -7,6 +7,7 @@
 		"build": "node build.js"
 	},
 	"bin": {
+		"4common": "4common",
 		"4mks": "4mks"
 	},
 	"repository": {
