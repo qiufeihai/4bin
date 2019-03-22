@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 切换npm源码
+#*
+
+. ./4common
+
+[[ $1 ]] || err "Usage: $0  <npm|taobao>    切换源到npm或淘宝镜像"
+
+main() {
+  [[ $1 == 'npm' ]] && npm config set registry https://registry.npmjs.org || npm config set registry https://registry.npm.taobao.org
+}
+main "$@"

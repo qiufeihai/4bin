@@ -8,7 +8,8 @@
 	},
 	"bin": {
 		"4common": "4common",
-		"4mks": "4mks"
+		"4mks": "4mks",
+		"4npm": "4npm"
 	},
 	"repository": {
 		"type": "git",
