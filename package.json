@@ -1,15 +1,16 @@
 {
 	"name": "4bin",
-	"version": "1.0.0",
+	"version": "1.0.5",
 	"description": "some script",
 	"main": "index.js",
 	"scripts": {
 		"build": "node build.js"
 	},
 	"bin": {
-		"4common": "4common",
 		"4mks": "4mks",
-		"4npm": "4npm"
+		"4npm": "4npm",
+		"4todocker": "4todocker",
+		"4vm": "4vm"
 	},
 	"repository": {
 		"type": "git",

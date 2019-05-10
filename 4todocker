@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 进入docker容器
+#*
+
+err() {
+    printf 'error: %s\n' "$1" >&2
+    exit 1
+}
+
+[[ $1 ]] || err "请输入容器id或名称"
+
+main() {
+  docker exec -it $1 "${2:-sh}"
+}
+main "$@"

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 运行docker虚拟机
+#*
+
+err() {
+    printf 'error: %s\n' "$1" >&2
+    exit 1
+}
+
+[[ $1 ]] || err "Usage: 4vm <container_name> [centos7|fedora27|debian9|debian8|ubuntu1404|etc.]"
+
+main() {
+  docker run --name "${1:-centos7}" -it geerlingguy/docker-"${2:-centos7}"-ansible /bin/bash
+}
+main "$@"
