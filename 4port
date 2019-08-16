@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 开启某端口
+#*
+
+log() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
+
+usage() {
+cat << EOF
+Usage: 
+    $0 add <port>    add port
+
+    $0 rm <port>     remove port
+ 
+    $0 reload        reload firewall
+
+    $0 status        get status
+
+    port range: 1080 or 1080-1000
+EOF
+}
+
+[[ $1 != "add" && $1 != "rm" && $1 != "reload" && $1 != "status" ]] && {
+    usage
+}
+
+main() {
+  [[ $1 == "add" ]] && firewall-cmd --permanent --zone=public --add-port=$2/tcp
+  [[ $1 == "rm" ]] && firewall-cmd --permanent --zone=public --remove-port=$2/tcp
+  [[ $1 == "reload" ]] && firewall-cmd --reload
+  [[ $1 == "status" ]] && firewall-cmd --permanent --zone=public --list-ports 
+}
+main "$@"
