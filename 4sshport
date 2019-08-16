@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# ssh 端口转发
+#*
+usage() {
+cat << EOF
+  本地端口转发：ssh  -fgCN  -L [local_bind_addr:]local_port:remote:remote_port middle_host
+  
+  远程端口转发：ssh  -fgCN  -R [bind_addr:]remote1_port:host:port remote1
+  
+  autossh本地端口转发：autossh -M echo_port -fgCN  -L [local_bind_addr:]local_port:remote:remote_port middle_host
+  
+  autossh远程端口转发：autossh -M echo_port -fgCN  -R [bind_addr:]remote1_port:host:port remote1
+
+  autossh动态端口转发：autossh -M 0 -qTN -D 1080 user@host. // M监听一个端口用来保持连接，q安静模式，T不登陆主机，N不执行远程命令
+
+  注意：其中-f 表示是否后台运行，远程端口转发中要设置远程服务器的/etc/ssh/sshd_config   GatewayPorts yes
+EOF
+}
+
+usage
