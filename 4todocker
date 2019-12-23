@@ -10,7 +10,7 @@ err() {
     exit 1
 }
 
-[[ $1 ]] || err "请输入容器id或名称"
+[[ $1 ]] || err "Usage: $0 <containerName> [cmd]"
 
 main() {
   docker exec -it $1 "${2:-sh}"

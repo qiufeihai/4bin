@@ -1,15 +1,15 @@
 {
 	"name": "4bin",
-	"version": "1.0.9",
+	"version": "1.0.10",
 	"description": "some script",
 	"main": "index.js",
 	"scripts": {
 		"build": "node build.js"
 	},
 	"bin": {
+		"4common": "4common",
 		"4mks": "4mks",
 		"4npm": "4npm",
-		"4common": "4common",
 		"4port": "4port",
 		"4sshport": "4sshport",
 		"4todocker": "4todocker",
