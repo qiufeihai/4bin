@@ -23,6 +23,7 @@ Usage:
 
     port range: 1080 or 1080-1000
 EOF
+exit 1
 }
 
 [[ $1 != "add" && $1 != "rm" && $1 != "reload" && $1 != "status" ]] && {

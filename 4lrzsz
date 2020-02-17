@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 上传或下载文件
+#*
+
+log() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
+
+usage() {
+cat << EOF
+Usage: 
+    $0 上传文件
+
+    $0 <file or dir> 下载文件
+ 
+EOF
+exit 1
+}
+
+
+if ! type -p rz &>/dev/null; then
+    log 安装lrzsz
+    sudo yum install -y lrzsz
+fi
+
+[[ $1 == "-h" || $1 == "--help" ]] && usage;
+echo $#
+[[ $# == 0 ]] && {
+  rz
+} || {
+   tar -zcvf $1.tar.gz $1
+   sz $1.tar.gz
+}
+
+
+

@@ -8,10 +8,12 @@
 	},
 	"bin": {
 		"4common": "4common",
+		"4lrzsz": "4lrzsz",
 		"4mks": "4mks",
 		"4npm": "4npm",
 		"4port": "4port",
 		"4sshport": "4sshport",
+		"4tar": "4tar",
 		"4todocker": "4todocker",
 		"4vm": "4vm"
 	},

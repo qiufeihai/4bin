@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# 压缩和解压
+#*
+
+log() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
+
+usage() {
+cat << EOF
+Usage: 
+    $0 c <file>  压缩文件
+
+    $0 x <file.tar.xx> <dir> 解压文件
+ 
+原生tar:
+  压缩：tar -zcvf file.tar.gz file
+  解压：tar -zxvf file.tar.gz -C dir
+文件类型：
+  -z .gz
+  -j .bz2
+  -J .xz
+EOF
+exit 1
+}
+
+[[ $1 != "c" && $1 != "x" ]] && {
+    
+    usage
+} || {
+  [[ $2 == ""  ]] && usage
+}
+
+main() {
+  [[ $1 == "c" ]] && tar -zcvf $2.tar.gz $2 
+  [[ $1 == "x" ]] && {
+    ext_name="${2##*.}"
+    
+    dir=${3:-.}
+    [[ $dir != "." ]] && mkdir $dir
+    
+    [[ $ext_name == "gz" ]] && tar -zxvf $2 -C $dir
+    [[ $ext_name == "bz2" ]] && tar -jxvf $2 -C $dir
+    [[ $ext_name == "xz" ]] && tar -Jxvf $2 -C $dir
+
+  }
+}
+main "$@"
