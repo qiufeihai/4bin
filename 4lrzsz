@@ -35,6 +35,3 @@ echo $#
    tar -zcvf $1.tar.gz $1
    sz $1.tar.gz
 }
-
-
-
