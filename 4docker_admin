@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# docker 管理
+
+log() {
+  echo -e  "\e[1;35m------------------------ $@ ------------------------------\e[0m"
+}
+
+usage() {
+cat << EOF
+Docker 监控和管理平台启动命令
+Usage: 
+    $0 start [ip1:port ip2:port ...]  启动
+
+    $0 stop  停止
+
+    原始命令：scope --help
+EOF
+exit 1
+}
+
+
+[[ $1 == "" || $1 == "-h" || $1 == "--help" ]] && usage;
+
+if ! type -p scope &>/dev/null; then
+    log 安装WeaveScope
+    sudo curl -L git.io/scope -o /usr/local/bin/scope
+    sudo chmod a+x /usr/local/bin/scope
+fi
+
+main() {
+  [[ $1 == "start" ]] && {
+    read -p "Enter Username: " username
+    read -s -p "Enter Password: " passowrd
+    shift;
+    scope launch -app.basicAuth -app.basicAuth.username $username -app.basicAuth.password $passowrd -probe.basicAuth -probe.basicAuth.username $username -probe.basicAuth.password $passowrd $@
+  }
+  [[ $1 == "stop" ]] && {
+    scope stop
+  }
+}
+main "$@"

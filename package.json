@@ -1,6 +1,6 @@
 {
 	"name": "4bin",
-	"version": "1.0.12",
+	"version": "1.0.14",
 	"description": "some script",
 	"main": "index.js",
 	"scripts": {
@@ -9,6 +9,7 @@
 	"bin": {
 		"4comment": "4comment",
 		"4common": "4common",
+		"4docker_admin": "4docker_admin",
 		"4lrzsz": "4lrzsz",
 		"4mks": "4mks",
 		"4npm": "4npm",
@@ -16,8 +17,8 @@
 		"4sshport": "4sshport",
 		"4tar": "4tar",
 		"4todocker": "4todocker",
-		"4vm": "4vm",
-		"4uncomment": "4uncomment"
+		"4uncomment": "4uncomment",
+		"4vm": "4vm"
 	},
 	"repository": {
 		"type": "git",
