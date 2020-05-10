@@ -2,7 +2,8 @@
 #
 # author: feihai
 #* 
-# 开启某端口
+# 开启某端口;
+# 试iptables过滤日志;
 #*
 
 log() {
@@ -13,27 +14,69 @@ log() {
 usage() {
 cat << EOF
 Usage: 
-    $0 add <port>    add port
+    $0 add <port>[/udp]  add port
 
-    $0 rm <port>     remove port
+    $0 rm <port>[/udp]   remove port
  
-    $0 reload        reload firewall
+    $0 reload            breload firewall
 
-    $0 status        get status
+    $0 status            get status
+
+    $0 addtrace <port>[/udp]  add trace for debug iptables
+
+    $0 rmtrace <port>[/udp]  remove trace for debug iptables
 
     port range: 1080 or 1080-1000
+
+    原命令：
+    firewall-cmd --permanent --zone=public --add-port=${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
+
+    firewall-cmd --permanent --zone=public --remove-port=${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
+
+    调试iptables过滤日志中：
+    iptables -t raw -A PREROUTING -p tcp -m tcp --dport 81 -j TRACE 
+    iptables -t raw -A OUTPUT -p tcp -m tcp --dport 81 -j TRACE
+    tail -f /var/log/messages　# 查看过滤日志TRACE: filter:INPUT:rule:1
+    iptables -L --line-numbers # 查看日志中对应的rule:序列号
+    iptables -t raw -D PREROUTING -p tcp -m tcp --dport 81 -j TRACE
+    iptables -t raw -D OUTPUT -p tcp -m tcp --dport 81 -j TRACE
 EOF
 exit 1
 }
 
-[[ $1 != "add" && $1 != "rm" && $1 != "reload" && $1 != "status" ]] && {
+[[ $1 != "add" && $1 != "rm" && $1 != "reload" && $1 != "status" && $1 != "addtrace" && $1 != "rmtrace" ]] && {
     usage
 }
 
 main() {
+  local port_protocol=$2
+  echo $port_protocol |grep -q -e '/tcp$' -e '/udp$' || {
+    port_protocol=$port_protocol/tcp
+  }
   [[ $1 == "add" ]] && firewall-cmd --permanent --zone=public --add-port=$2/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
   [[ $1 == "rm" ]] && firewall-cmd --permanent --zone=public --remove-port=$2/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
   [[ $1 == "reload" ]] && firewall-cmd --reload
   [[ $1 == "status" ]] && firewall-cmd --permanent --zone=public --list-ports 
+  [[ $1 == "addtrace" ]] && {
+    local port=${port_protocol%%/*}
+    local protocol=${port_protocol##*/}
+    iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
+    echo "已执行iptables命令:"
+    echo "iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE"
+    echo "iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE"
+    echo "请执行：tail -f /var/log/messages  查看过滤日志TRACE: filter:INPUT:rule:1"
+    echo "请执行：iptables -L --line-numbers 查看日志中对应的rule:序列号"
+  }
+
+  [[ $1 == "rmtrace" ]] && {
+    local port=${port_protocol%%/*}
+    local protocol=${port_protocol##*/}
+    iptables -t raw -D PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -D OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
+    echo "已执行iptables命令:"
+    echo "iptables -t raw -D PREROUTING -p $protocol -m $protocol --dport $port -j TRACE"
+    echo "iptables -t raw -D OUTPUT -p $protocol -m $protocol --dport $port -j TRACE"
+  }
 }
 main "$@"
