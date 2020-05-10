@@ -61,8 +61,8 @@ main() {
   [[ $1 == "addtrace" ]] && {
     local port=${port_protocol%%/*}
     local protocol=${port_protocol##*/}
-    # iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
-    # iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
     echo "已执行iptables命令:"
     echo "iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE"
     echo "iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE"
