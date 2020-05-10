@@ -34,12 +34,13 @@ Usage:
     firewall-cmd --permanent --zone=public --remove-port=${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
 
     调试iptables过滤日志中：
-    iptables -t raw -A PREROUTING -p tcp -m tcp --dport 81 -j TRACE 
-    iptables -t raw -A OUTPUT -p tcp -m tcp --dport 81 -j TRACE
+    iptables -t raw -A PREROUTING -p tcp -m tcp --dport 81 -j TRACE # 添加trace规则
+    iptables -t raw -A OUTPUT -p tcp -m tcp --dport 81 -j TRACE # 添加trace规则
     tail -f /var/log/messages　# 查看过滤日志TRACE: filter:INPUT:rule:1
     iptables -L --line-numbers # 查看日志中对应的rule:序列号
-    iptables -t raw -D PREROUTING -p tcp -m tcp --dport 81 -j TRACE
-    iptables -t raw -D OUTPUT -p tcp -m tcp --dport 81 -j TRACE
+    iptables -t raw -D PREROUTING -p tcp -m tcp --dport 81 -j TRACE # 删除trace规则
+    iptables -t raw -D OUTPUT -p tcp -m tcp --dport 81 -j TRACE # 删除trace规则
+    iptables -t raw -S # 查看已添加的trace规则
 EOF
 exit 1
 }
