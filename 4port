@@ -29,17 +29,17 @@ Usage:
     port range: 1080 or 1080-1000
 
     原命令：
-    firewall-cmd --permanent --zone=public --add-port=${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
+    firewall-cmd --permanent --zone=public --add-port=\${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
 
-    firewall-cmd --permanent --zone=public --remove-port=${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
+    firewall-cmd --permanent --zone=public --remove-port=\${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
 
     调试iptables过滤日志中：
-    iptables -t raw -A PREROUTING -p tcp -m tcp --dport 81 -j TRACE # 添加trace规则
-    iptables -t raw -A OUTPUT -p tcp -m tcp --dport 81 -j TRACE # 添加trace规则
-    tail -f /var/log/messages　# 查看过滤日志TRACE: filter:INPUT:rule:1
+    iptables -t raw -A PREROUTING -p tcp -m tcp --dport \${port} -j TRACE # 添加trace规则
+    iptables -t raw -A OUTPUT -p tcp -m tcp --dport \${port} -j TRACE # 添加trace规则
+    tail -fn0 /var/log/messages | grep 'DPT=\${port}'　# 查看过滤日志TRACE: filter:INPUT:rule:1
     iptables -L --line-numbers # 查看日志中对应的rule:序列号
-    iptables -t raw -D PREROUTING -p tcp -m tcp --dport 81 -j TRACE # 删除trace规则
-    iptables -t raw -D OUTPUT -p tcp -m tcp --dport 81 -j TRACE # 删除trace规则
+    iptables -t raw -D PREROUTING -p tcp -m tcp --dport \${port} -j TRACE # 删除trace规则
+    iptables -t raw -D OUTPUT -p tcp -m tcp --dport \${port} -j TRACE # 删除trace规则
     iptables -t raw -S # 查看已添加的trace规则
 EOF
 exit 1
@@ -61,12 +61,12 @@ main() {
   [[ $1 == "addtrace" ]] && {
     local port=${port_protocol%%/*}
     local protocol=${port_protocol##*/}
-    iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
-    iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
+    # iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
+    # iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
     echo "已执行iptables命令:"
     echo "iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE"
     echo "iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE"
-    echo "请执行：tail -f /var/log/messages  查看过滤日志TRACE: filter:INPUT:rule:1"
+    echo "请执行：tail -fn0 /var/log/messages | grep 'DPT=${port}'  查看过滤日志TRACE: filter:INPUT:rule:1"
     echo "请执行：iptables -L --line-numbers 查看日志中对应的rule:序列号"
   }
 
