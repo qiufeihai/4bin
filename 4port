@@ -34,6 +34,10 @@ Usage:
     firewall-cmd --permanent --zone=public --remove-port=\${port}/tcp && firewall-cmd --reload && firewall-cmd --permanent --zone=public --list-ports
 
     调试iptables过滤日志中：
+    modprobe nf_log_ipv4 # 开启内核模块
+    modprobe ipt_LOG # 开启内核模块
+    sysctl net.netfilter.nf_log.2=nf_log_ipv4 # 开启内核模块
+
     iptables -t raw -A PREROUTING -p tcp -m tcp --dport \${port} -j TRACE # 添加trace规则
     iptables -t raw -A OUTPUT -p tcp -m tcp --dport \${port} -j TRACE # 添加trace规则
     tail -fn0 /var/log/messages | grep 'DPT=\${port}'　# 查看过滤日志TRACE: filter:INPUT:rule:1
@@ -41,6 +45,7 @@ Usage:
     iptables -t raw -D PREROUTING -p tcp -m tcp --dport \${port} -j TRACE # 删除trace规则
     iptables -t raw -D OUTPUT -p tcp -m tcp --dport \${port} -j TRACE # 删除trace规则
     iptables -t raw -S # 查看已添加的trace规则
+
 EOF
 exit 1
 }
