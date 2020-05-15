@@ -1,6 +1,6 @@
 {
 	"name": "4bin",
-	"version": "1.0.17",
+	"version": "1.0.18",
 	"description": "some script",
 	"main": "index.js",
 	"scripts": {
