@@ -68,8 +68,8 @@ main() {
     local protocol=${port_protocol##*/}
     local source=${3:-''}
     [ $source ] && source="-s $source"
-    iptables -t raw -A PREROUTING -p $protocol -m $protocol --dport $port -j TRACE
-    iptables -t raw -A OUTPUT -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -A PREROUTING $source -p $protocol -m $protocol --dport $port -j TRACE
+    iptables -t raw -A OUTPUT $source -p $protocol -m $protocol --dport $port -j TRACE
     echo "已执行iptables命令:"
     echo "iptables -t raw -A PREROUTING $source -p $protocol -m $protocol --dport $port -j TRACE"
     echo "iptables -t raw -A OUTPUT $source -p $protocol -m $protocol --dport $port -j TRACE"
