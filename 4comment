@@ -4,7 +4,7 @@
 #
 function comment() {
   [[ ($1 != "#" && $1 != "//") || $# -lt 2 ]] && {
-    echo "Usage: $0 <# or //> <pattern> <file...>"
+    echo "Usage: $0 <'#' or //> <pattern> <file...>"
     exit 1
   }
   local comment_str="#"
@@ -17,7 +17,7 @@ function comment() {
 
 function uncomment() {
   [[ ($1 != "#" && $1 != "//") || $# -lt 2 ]] && {
-    echo "Usage: $0 <# or //> <pattern> <file...>"
+    echo "Usage: $0 <'#' or //> <pattern> <file...>"
     exit 1
   }
   local comment_str="#"
