@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# 检查nginx证书剩余时间
+#
+
+
+NGINX_HOME=${1:-/etc/nginx}
+NGINX_CONF_FILES=$(find $NGINX_HOME -type f -name '*.conf')
+ONE_DAY_SECONDS=86400
+
+cert_files=()
+
+usage(){
+  cat << EOF
+Usage: 
+    $0 [nginx_home_dir]    nginx_home_dir默认值：/etc/nginx
+    $0 -h | --help         show this help info           
+EOF
+exit 0;
+}
+
+get_ip() {
+  ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+}
+
+[[ $1 == "-h" || $1 == "--help" ]] && usage
+
+for file in $NGINX_CONF_FILES; do
+  #  printf '%s\n' "$file"
+   cert_files+=$(grep 'ssl_certificate .*;' -o $file 2>/dev/null | awk '{print $2}'  | sed 's/;//')" "
+done
+
+
+uniq_cert_files=$(echo $cert_files | sed 's/ /\n/g' |sort|uniq)
+for cert_file in $uniq_cert_files; do
+ [ -f $cert_file ] && {
+   check_ret=$(openssl x509 -in $cert_file -noout -dates)
+   #echo $check_ret
+   end_date=${check_ret##*notAfter=}
+   now_timestamp=$(date +%s)
+   end_timestamp=$(date -d "$end_date" +%s)
+   #echo $end_date
+   fmt_end_date=$(date -d "$end_date" +"%Y-%m-%d %H:%M.%S")
+   #echo $now_timestamp $end_timestamp
+   #echo $end_timestamp $((end_timestamp - ONE_DAY_SECONDS))
+   remain_days=$(((end_timestamp -  now_timestamp) / ONE_DAY_SECONDS))
+   msg_info=$(echo [`date +"%Y-%m-%d  %H:%M:%S"`] [`get_ip`] 证书到期时间：$fmt_end_date  剩余$remain_days天 $cert_file | tee -a /var/log/check_cert.log)
+   echo $msg_info
+ }
+done

@@ -7,9 +7,11 @@
 		"build": "node build.js"
 	},
 	"bin": {
+		"4check_cert": "4check_cert",
 		"4comment": "4comment",
 		"4common": "4common",
 		"4docker_admin": "4docker_admin",
+		"4http": "4http",
 		"4lrzsz": "4lrzsz",
 		"4mks": "4mks",
 		"4npm": "4npm",

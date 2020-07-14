@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# author: feihai
+#* 
+# python 简单HTTP服务
+#*
+
+PYTHON_VERSION=`python -V 2>&1 | sed -nE 's/^Python ([0-9]).*$/\1/p'`
+
+usage(){
+  echo "Usage: $0 [port]"
+  exit 0;
+}
+
+[[ $1 == "-h" || $1 == "--help" ]] && usage
+
+[[ $PYTHON_VERSION == "2" ]] && {
+  python -m SimpleHTTPServer $@
+} || {
+  python -m http.server $@
+}
