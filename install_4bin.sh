@@ -11,6 +11,7 @@ install_from_github(){
   chmod +x /tmp/4bin/4* 
   sudo cp /tmp/4bin/4*  /usr/local/bin/
   rm -rf /tmp/4bin
+  exit 0;
 }
 
 install_from_gitee(){
@@ -19,6 +20,7 @@ install_from_gitee(){
   chmod +x /tmp/4bin/4*
   sudo cp /tmp/4bin/4*  /usr/local/bin/
   rm -rf /tmp/4bin
+  exit 0;
 }
 
 
