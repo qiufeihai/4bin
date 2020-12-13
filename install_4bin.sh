@@ -6,6 +6,7 @@
 #*
 
 install_from_github(){
+  [ -e "/tmp/4bin" ] && rm -rf /tmp/4bin
   git clone --depth 1 https://github.com/qiufeihai/4bin.git /tmp/4bin
   chmod +x /tmp/4bin/4* 
   sudo cp /tmp/4bin/4*  /usr/local/bin/
@@ -13,6 +14,7 @@ install_from_github(){
 }
 
 install_from_gitee(){
+  [ -e "/tmp/4bin" ] && rm -rf /tmp/4bin
   git clone --depth 1 https://gitee.com/SImMon_Fo4r/bin.git /tmp/4bin
   chmod +x /tmp/4bin/4*
   sudo cp /tmp/4bin/4*  /usr/local/bin/
